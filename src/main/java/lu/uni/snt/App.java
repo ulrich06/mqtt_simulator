@@ -20,5 +20,14 @@ public class App {
                 .setMax(5)
                 .withFailureRate(0.5)
                 .start();
+
+        /*SensorPool.newPool()
+                .amount(500)
+                .onSystem(system)
+                .setMax(15)
+                .setMin(0)
+                .withPeriod(1000)
+                .withFailureRate(0.1)
+                .start();*/
     }
 }
