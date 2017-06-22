@@ -18,7 +18,7 @@ public class App {
                 .withPeriod(250)
                 .setMin(0)
                 .setMax(5)
-                .withFailureRate(0.5)
+                .withFailureRate(0.1)
                 .start();
 
         /*SensorPool.newPool()

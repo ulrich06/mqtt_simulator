@@ -33,28 +33,30 @@ public class Sensor extends AbstractActor {
                 .match(Sense.class, x -> {
                     this.value = ThreadLocalRandom.current().nextDouble(x.min, x.max + 1);
                     this.date = System.currentTimeMillis() / 1000;
-                    if ((new Random().nextDouble()) < x.failureRate)
+                    double rnd = new Random().nextDouble();
+                    if (rnd < x.failureRate) {
                         this.failure = true;
+                    } else {
+                        this.failure = false;
+                    }
+
                 })
                 .match(Send.class, x -> mqttSender.tell(new SensorValue(id, value, date, failure), getSelf()))
                 .build();
     }
 
-    static public class SensorValue {
+    public class SensorValue {
 
-        public final int id;
-        public final double value;
-        public final long date;
+        public int id;
+        public double value;
+        public long date;
         public boolean failure = false;
 
-        public SensorValue(int id, double value, long date) {
+
+        public SensorValue(int id, double value, long date, boolean failure) {
             this.id = id;
             this.value = value;
             this.date = date;
-        }
-
-        public SensorValue(int id, double value, long date, boolean failure) {
-            this(id, value, date);
             this.failure = failure;
 
 
@@ -62,7 +64,7 @@ public class Sensor extends AbstractActor {
 
         @Override
         public String toString() {
-            return id + " - " + value + " - " + date;
+            return id + " - " + value + " - " + date + " - " + failure;
         }
 
         public String format() {
@@ -70,7 +72,7 @@ public class Sensor extends AbstractActor {
         }
     }
 
-    static public class Sense {
+    public static class Sense {
         private final double max;
         private final double failureRate;
         private final double min;
